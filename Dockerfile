@@ -1,14 +1,14 @@
 # --- WIREMOCK ---
 
-FROM ekino/java7
+FROM java:8
 MAINTAINER fronton@ekino.com
 
 ENV WM_PACKAGE wiremock
-ENV WM_VERSION 1.55
+ARG WM_VERSION=2.1.11
 
 RUN mkdir /$WM_PACKAGE
 WORKDIR /$WM_PACKAGE
-RUN curl -sSL -o $WM_PACKAGE.jar https://repo1.maven.org/maven2/com/github/tomakehurst/wiremock/$WM_VERSION/$WM_PACKAGE-$WM_VERSION-standalone.jar
+RUN curl -sSL -o $WM_PACKAGE.jar https://repo1.maven.org/maven2/com/github/tomakehurst/$WM_PACKAGE-standalone/$WM_VERSION/$WM_PACKAGE-standalone-$WM_VERSION.jar
 
 EXPOSE 8080
 
