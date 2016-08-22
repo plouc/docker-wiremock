@@ -1,0 +1,23 @@
+sudo: required
+
+services:
+  - docker
+
+before_install:
+  - docker version
+  - docker build --build-arg WM_VERSION=$WM_VERSION -t ekino/wiremock:$WM_VERSION .
+
+env:
+  - WM_VERSION=2.1.9
+  - WM_VERSION=2.1.10
+  - WM_VERSION=2.1.11
+
+script:
+  - docker run -d --name wiremock -v $(readlink -f files):/wiremock/__files -v $(readlink -f mappings):/wiremock/mappings ekino/wiremock:$WM_VERSION
+  - sleep 2
+  - docker logs wiremock
+  - docker exec wiremock curl -sS http://localhost:8080/hello
+  - docker rm -f wiremock
+
+after_success:
+  - echo "should publish ekino/wiremock:$WM_VERSION to docker registry"
